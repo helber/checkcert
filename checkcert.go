@@ -97,7 +97,10 @@ func CheckHost(domain string, port int, host string, res chan<- HostResult) {
 			case 2:
 				result.TLSVersion = "TLS v1.1"
 			case 3:
-				result.TLSVersion = "TLS v1.2/v1.3"
+				result.TLSVersion = "TLS v1.2"
+				if state.TLSUnique == nil {
+					result.TLSVersion = "TLS v1.3"
+				}
 			}
 			result.ExpireDays = int(v.NotAfter.Sub(timeNow).Hours() / 24)
 			if len(v.DNSNames) >= 1 {
