@@ -39,3 +39,4 @@
 # End of https://www.gitignore.io/api/visualstudiocode
 .vscode
 _ignore.md
+dist/
