@@ -85,11 +85,15 @@ checkcert -d www.google.com.br,example.com:443 -t
 			OutputTable(results)
 			return
 		}
+		if len(results) == 1 {
+			fmt.Println(results[0].ExpireDays)
+			return
+		}
 		for _, result := range results {
 			if result.Err != nil {
 				fmt.Println("")
 			} else {
-				fmt.Println(result.ExpireDays)
+				fmt.Printf("%s - %d\n", result.Host, result.ExpireDays)
 			}
 		}
 
@@ -166,7 +170,39 @@ func OutputTable(results []checkcert.HostResult) {
 		}
 		data = append(data, res.Issuer)
 		data = append(data, res.TLSVersion)
-		table.Append(data)
+		if res.ExpireDays < 30 && res.ExpireDays >= 20 {
+			table.Rich(data, []tablewriter.Colors{
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor},
+			})
+		} else if res.ExpireDays < 20 && res.ExpireDays >= 0 {
+			table.Rich(data, []tablewriter.Colors{
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgMagentaColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgMagentaColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgMagentaColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgMagentaColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgMagentaColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgMagentaColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgMagentaColor},
+			})
+		} else if res.ExpireDays < 0 {
+			table.Rich(data, []tablewriter.Colors{
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor, tablewriter.BgRedColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor, tablewriter.BgRedColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor, tablewriter.BgRedColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor, tablewriter.BgRedColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor, tablewriter.BgRedColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor, tablewriter.BgRedColor},
+				tablewriter.Colors{tablewriter.Normal, tablewriter.FgHiYellowColor, tablewriter.BgRedColor},
+			})
+		} else {
+			table.Append(data)
+		}
 	}
 	table.Render()
 }

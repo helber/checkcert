@@ -89,15 +89,17 @@ func CheckHost(domain string, port int, host string, res chan<- HostResult) {
 	for i, v := range state.PeerCertificates {
 		switch i {
 		case 0:
-			switch v.Version {
-			case 0:
+			switch state.Version {
+			case tls.VersionSSL30:
 				result.TLSVersion = "SSL v3"
-			case 1:
+			case tls.VersionTLS10:
 				result.TLSVersion = "TLS v1.0"
-			case 2:
+			case tls.VersionTLS11:
 				result.TLSVersion = "TLS v1.1"
-			case 3:
-				result.TLSVersion = "TLS v1.2/v1.3"
+			case tls.VersionTLS12:
+				result.TLSVersion = "TLS v1.2"
+			case tls.VersionTLS13:
+				result.TLSVersion = "TLS v1.3"
 			}
 			result.ExpireDays = int(v.NotAfter.Sub(timeNow).Hours() / 24)
 			if len(v.DNSNames) >= 1 {
