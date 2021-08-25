@@ -5,27 +5,26 @@ before:
     - go mod tidy
     - go generate ./...
 builds:
-- 
-  main: ./cmd/checkcert/main.go
-  binary: checkcert
-  goos:
-    - linux
-  goarch:
-    - amd64
-    - arm
-    - arm64
-  env:
-    - CGO_ENABLED=0
+  - main: ./cmd/checkcert/main.go
+    binary: checkcert
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    env:
+      - CGO_ENABLED=0
 archives:
-- files:
-  - none*
+  - files:
+      - none*
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - "^docs:"
+      - "^test:"
