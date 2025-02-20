@@ -2,7 +2,7 @@ module github.com/helber/checkcert
 
 go 1.22.0
 
-toolchain go1.23.5
+toolchain go1.24.0
 
 require (
 	github.com/bobesa/go-domain-util v0.0.0-20190911083921-4033b5f7dd89
